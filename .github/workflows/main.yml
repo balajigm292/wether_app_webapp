@@ -36,6 +36,6 @@ jobs:
 
       - name: SonarQube Scan
         env:
-          SONAR_TOKEN: squ_00944d42c3138a5e6fa16e39fd068ac8eb7256aa
-          SONAR_HOST_URL: http://18.235.233.253:9000
+          SONAR_TOKEN: squ_f36ca9d1b18ee652c3c507489ade0329a2a3c37c
+          SONAR_HOST_URL: http://100.25.0.221:9000
         run: mvn sonar-scanner -Dsonar.projectKey=my-project-key -Dsonar.host.url=$SONAR_HOST_URL -Dsonar.login=$SONAR_TOKEN
