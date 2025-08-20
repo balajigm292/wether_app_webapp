@@ -25,5 +25,5 @@ jobs:
           -Dsonar.organization=my-org
           -Dsonar.projectKey=my-Java-web-app
       env:
-        SONAR_TOKEN: sqa_b0164ed64964379eb41d0d7c300d545dd35e884d
-        SONAR_HOST_URL: http://100.25.0.221:9000
+        SONAR_TOKEN: sqa_de170496f41c08ad99da487eb0eb2202a6f81f58
+        SONAR_HOST_URL: http://3.80.32.19:9000/
