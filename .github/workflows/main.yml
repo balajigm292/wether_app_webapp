@@ -36,7 +36,13 @@ jobs:
         env:
           SONAR_TOKEN: sqa_de170496f41c08ad99da487eb0eb2202a6f81f58
           SONAR_HOST_URL: http://3.80.32.19:9000
-
+      - name: Display selected branch
+        run: echo "Running on branch ${{ github.event.inputs.target_branch }}"
+      - name: Checking context variable
+        run: |
+          echo "Repository name: ${{ github.repository }}"
+          echo "Workflow name: ${{ github.workflow }}"
+          echo "Triggered by: ${{ github.triggering_actor }}"
       # Check SonarQube Quality Gate status
       - name: SonarQube Quality Gate check
         id: sonarqube-quality-gate-check
