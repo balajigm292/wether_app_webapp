@@ -3,7 +3,7 @@ name: CI/CD workflow for Maven Build and Sonar Code scan
 on:
   workflow_dispatch:
     inputs:
-      branch:
+      target_branch:
         description: "Branch to build"
         required: true
         default: "master"
@@ -16,7 +16,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
         with:
-          ref: ${{ github.event.inputs.branch }}
+          ref: ${{ github.event.inputs.target_branch }}
 
       # Set up JDK 11
       - name: Set up JDK 11
