@@ -1,0 +1,102 @@
+version: 0.2
+
+env:
+  variables:
+    SonarHost: "http://10.3.1.54:9000"   # hardcoded value
+  parameter-store:
+    SonarToken: "idx-cync-sonar-token"
+
+phases:
+  install:
+    runtime-versions:
+      python: 3.8
+      nodejs: 14
+      java: corretto17
+  pre_build:
+    commands:
+      - npm install -g sonarqube-scanner@4.2.3
+      - sonar-scanner --version
+      - echo "Installing jq..."
+      - apt-get update
+      - apt-get install -y jq
+      - export Branch=$GITHUB_BRANCH_NAME
+      - echo "Branch=$GITHUB_BRANCH_NAME"
+  build:
+    commands:
+      - echo "Running SonarQube Scanner..."
+      # - SONAR_JAVA_OPTS="--add-opens java.base/sun.nio.ch=ALL-UNNAMED --add-opens java.base/java.io=ALL-UNNAMED"
+ 
+      # - sonar-scanner -Dsonar.host.url="$SonarHost" -Dsonar.login="$SonarToken" -Dsonar.projectKey="aws-Infra-Cync-Stgsqlupa-Templates" -Dsonar.projectName="aws-Infra-Cync-Stgsqlupa-Templates" -Dsonar.sources="." -Dsonar.inclusions="**/*.yml,**/*.yaml,**/*.json" -Dsonar.exclusions="**/test/**,**/*.spec.js,**/Nds-Cync-Ec2-Status-Check-template.yml,**/Nds-Cync-Consoildated-Dashboard-Template.yml" -Dsonar.verbose=true -Dsonar.scanner.dumpToFile=true -Dsonar.scm.disabled=true -Dsonar.yaml.enabled=true -Dsonar.projectVersion="1.0" -Dsonar.java.binaries="dummy" -Dsonar.java.additionalOpts="$SONAR_JAVA_OPTS"
+      
+      - |
+        case "$Branch" in
+          "dev2")
+            echo "Running sonar command" 
+            PROJECT_KEY="aws-Infra-Cync-old-Dev2-Template"
+            PROJECT_NAME="aws-Infra-Cync-old-Dev2-Template"
+            EMAIL_FROM="idxaws_abldevops@idexcel.com"
+            EMAIL_TO="sandeep.k@idexcel.com,vinoth.d@idexcel.com,vijay.c@idexcel.com"
+            sonar-scanner \
+              -Dsonar.host.url=$SonarHost \
+              -Dsonar.login=$SonarToken \
+              -Dsonar.language=yml \
+              -Dsonar.inclusions=**/*.yml,**/*.yaml,**/*.json \
+              -Dsonar.projectKey=aws-Infra-Cync-old-Dev2-Template \
+              -Dsonar.projectName=aws-Infra-Cync-old-Dev2-Template
+            aws s3 cp s3://nds-cync-stgsqlup-pipeline-devops-scripts-798793081579-bkt/stgsqlup/sonarqube-files/send-grid-notification.sh .
+            chmod +x send-grid-notification.sh && ./send-grid-notification.sh
+            ;;
+          "Dev-2025")
+            echo "Running sonar command" 
+            PROJECT_KEY="aws-Infra-Cync-Dev2-Template"
+            PROJECT_NAME="aws-Infra-Cync-Dev2-Template"
+            EMAIL_FROM="idxaws_abldevops@idexcel.com"
+            EMAIL_TO="sandeep.k@idexcel.com,vinoth.d@idexcel.com,vijay.c@idexcel.com"
+            sonar-scanner \
+              -Dsonar.host.url=$SonarHost \
+              -Dsonar.login=$SonarToken \
+              -Dsonar.language=yml \
+              -Dsonar.inclusions=**/*.yml,**/*.yaml,**/*.json \
+              -Dsonar.projectKey=aws-Infra-Cync-Dev2-Template \
+              -Dsonar.projectName=aws-Infra-Cync-Dev2-Template
+            aws s3 cp s3://nds-cync-stgsqlup-pipeline-devops-scripts-798793081579-bkt/stgsqlup/sonarqube-files/send-grid-notification.sh .
+            chmod +x send-grid-notification.sh && ./send-grid-notification.sh
+            ;;
+          "UatV3-2024")
+            echo "Running sonar command UatV3-2024"
+            PROJECT_KEY="aws-Infra-Cync-Uat-Templates"
+            PROJECT_NAME="aws-Infra-Cync-Uat-Templates" 
+            EMAIL_FROM="idxaws_abldevops@idexcel.com"
+            EMAIL_TO="prasad.g@idexcel.com,sowmiyanivasini.r@idexcel.com,deeksha.h@idexcel.com,vijay.c@idexcel.com,vinoth.d@idexcel.com"
+            sonar-scanner -Dsonar.host.url=$SonarHost -Dsonar.login=$SonarToken -Dsonar.projectKey=aws-Infra-Cync-Uat-Templates -Dsonar.projectName=aws-Infra-Cync-Uat-Templates -Dsonar.language=yml -Dsonar.inclusions=**/*.yml,**/*.yaml,**/*.json -Dsonar.exclusions=**/*.sh,**/*.txt,**/*.js -Dsonar.yaml.yamllint.disable-rule=indentation,line-length,trailing-spaces,document-start,document-end -Dsonar.scanner.failOnError=false -Dsonar.scanner.skipOnFailure=true
+            aws s3 cp s3://nds-cync-stgsqlup-pipeline-devops-scripts-798793081579-bkt/stgsqlup/sonarqube-files/send-grid-notification.sh .
+            chmod +x send-grid-notification.sh && ./send-grid-notification.sh
+            ;;
+          "StgSqlUp-2024")
+            echo "Running sonar command StgSqlUp-2024"
+            aws s3 cp s3://nds-cync-stgsqlup-pipeline-devops-scripts-798793081579-bkt/stgsqlup/sonarqube-files/send-grid-notification.sh .
+            PROJECT_KEY="aws-Infra-Cync-StgsqlUp-Template"
+            PROJECT_NAME="aws-Infra-Cync-StgsqlUp-Template"
+            EMAIL_FROM="idxaws_abldevops@idexcel.com"
+            EMAIL_TO="sandeep.k@idexcel.com,vinoth.d@idexcel.com,vijay.c@idexcel.com"
+            SONAR_JAVA_OPTS="--add-opens java.base/sun.nio.ch=ALL-UNNAMED --add-opens java.base/java.io=ALL-UNNAMED"
+            sonar-scanner -Dsonar.host.url="$SonarHost" -Dsonar.login="$SonarToken" -Dsonar.projectKey="aws-Infra-Cync-StgsqlUp-Template" -Dsonar.projectName="aws-Infra-Cync-StgsqlUp-Template" -Dsonar.sources="." -Dsonar.inclusions="**/*.yml,**/*.yaml,**/*.json" -Dsonar.exclusions="**/test/**,**/*.spec.js,**/Nds-Cync-Ec2-Status-Check-template.yml,**/Nds-Cync-Consoildated-Dashboard-Template.yml" -Dsonar.verbose=true -Dsonar.scanner.dumpToFile=true -Dsonar.scm.disabled=true -Dsonar.yaml.enabled=true -Dsonar.java.binaries="dummy" -Dsonar.java.additionalOpts="$SONAR_JAVA_OPTS"
+            chmod +x send-grid-notification.sh && ./send-grid-notification.sh
+            ;;
+          "ProdV2")
+            echo "Running sonar command StgSqlUp-2024"
+            PROJECT_KEY="aws-Infra-Cync-Production-Template"
+            PROJECT_NAME="aws-Infra-Cync-Production-Template"
+            EMAIL_FROM="idxaws_abldevops@idexcel.com"
+            EMAIL_TO="prasad.g@idexcel.com,sowmiyanivasini.r@idexcel.com,deeksha.h@idexcel.com,vijay.c@idexcel.com,vinoth.d@idexcel.com"
+            SONAR_JAVA_OPTS="--add-opens java.base/sun.nio.ch=ALL-UNNAMED --add-opens java.base/java.io=ALL-UNNAMED"
+ 
+            sonar-scanner -Dsonar.host.url="$SonarHost" -Dsonar.login="$SonarToken" -Dsonar.projectKey="aws-Infra-Cync-Production-Template" -Dsonar.projectName="aws-Infra-Cync-Production-Template" -Dsonar.sources="." -Dsonar.inclusions="**/*.yml,**/*.yaml,**/*.json" -Dsonar.exclusions="**/test/**,**/*.spec.js,**/Nds-Cync-Ec2-Status-Check-template.yml,**/Nds-Cync-Consoildated-Dashboard-Template.yml" -Dsonar.verbose=true -Dsonar.scanner.dumpToFile=true -Dsonar.yaml.enabled=true -Dsonar.java.binaries="dummy" -Dsonar.java.additionalOpts="$SONAR_JAVA_OPTS"
+            aws s3 cp s3://nds-cync-stgsqlup-pipeline-devops-scripts-798793081579-bkt/stgsqlup/sonarqube-files/send-grid-notification.sh .
+            chmod +x send-grid-notification.sh && ./send-grid-notification.sh
+            ;;
+          *)
+           echo "Branch $Branch-name is not part of the pipeline's active branches 😊...####...😊"
+           exit 0
+           ;;
+        esac
