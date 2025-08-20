@@ -7,19 +7,16 @@ on:
         description: "Branch to build"
         required: true
         default: "master"
-  push:
-    branches:
-      - main
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      # Checkout the selected branch (from workflow input or default)
+      # Checkout the branch passed from Jenkins input
       - name: Checkout code
         uses: actions/checkout@v2
         with:
-          ref: ${{ github.event.inputs.branch || github.ref_name }}
+          ref: ${{ github.event.inputs.branch }}
 
       # Set up JDK 11
       - name: Set up JDK 11
@@ -40,7 +37,7 @@ jobs:
           args: >
             -Dsonar.projectKey=my-Java-web-app
         env:
-          SONAR_TOKEN: sqa_de170496f41c08ad99da487eb0eb2202a6f81f58
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: http://3.80.32.19:9000
 
       # Check SonarQube Quality Gate status
@@ -49,7 +46,7 @@ jobs:
         uses: sonarsource/sonarqube-quality-gate-action@master
         timeout-minutes: 5
         env:
-          SONAR_TOKEN: sqa_de170496f41c08ad99da487eb0eb2202a6f81f58
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: http://3.80.32.19:9000
 
       # Show the Quality Gate result
