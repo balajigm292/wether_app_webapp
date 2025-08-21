@@ -39,7 +39,7 @@ jobs:
             -Dsonar.projectKey=my-Java-web-app
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: http://3.80.32.19:9000
+          SONAR_HOST_URL: http://100.26.36.190:9000
 
       # Check SonarQube Quality Gate status
       - name: SonarQube Quality Gate check
