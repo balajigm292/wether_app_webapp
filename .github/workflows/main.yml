@@ -35,7 +35,7 @@ jobs:
             -Dsonar.projectKey=my-test-app
         env:
           SONAR_TOKEN: sqa_de170496f41c08ad99da487eb0eb2202a6f81f58
-          SONAR_HOST_URL: http://100.26.36.190:9000
+          SONAR_HOST_URL: http://13.218.173.72:9000
       - name: Display selected branch
         run: echo "Running on branch ${{ github.event.inputs.target_branch }}"
       - name: Checking context variable
@@ -50,7 +50,7 @@ jobs:
         timeout-minutes: 5
         env:
           SONAR_TOKEN: sqa_de170496f41c08ad99da487eb0eb2202a6f81f58
-          SONAR_HOST_URL: http://100.26.36.190:9000
+          SONAR_HOST_URL: http://13.218.173.72:9000
  
       # Show the Quality Gate result
       - name: Show Quality Gate Status
